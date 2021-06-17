@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.12
 
 RUN { set -eux; \
     \
@@ -14,7 +14,7 @@ ENTRYPOINT ["/sbin/tini", "--", "/docker-entrypoint.sh"]
 
 CMD ["/usr/sbin/sshd", "-D"]
 
-RUN apk add --no-cache \
+RUN apk update && apk upgrade && apk add --no-cache \
         openssh \
         socat \
         tini \
