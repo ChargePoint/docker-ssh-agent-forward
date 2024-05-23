@@ -29,11 +29,8 @@ else
   HOST_IP=127.0.0.1
 fi
 
-# FIXME Find a way to get rid of this additional 1s wait
-sleep 1
-while ! nc -z -w5 ${HOST_IP} ${HOST_PORT}; do sleep 0.1; done
-
-ssh-keyscan -p "${HOST_PORT}" "${HOST_IP}" >"${KNOWN_HOSTS_FILE}" 2>/dev/null
+count=0
+while (! ssh-keyscan -p "${HOST_PORT}" "${HOST_IP}" >"${KNOWN_HOSTS_FILE}" 2>/dev/null) && [ $count -le 10 ]; do let count++ || true; sleep 0.5; done
 
 # show the keys that are being forwarded
 ssh \
